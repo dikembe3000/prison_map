@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+
+<head>
+<title>Prison Map</title>
+
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">-->
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+<link href = "css/style_blank.css" type = "text/css" rel="stylesheet">
+<link href = "css/leaflet-sidebar.css" type = "text/css" rel="stylesheet"> 
+<link href = "css/Control.MiniMap.css" type = "text/css" rel="stylesheet"> 
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+<script src ="js/map.js"></script>
+<script src ="js/leaflet-sidebar.js"></script>
+<script	src ="js/Control.MiniMap.js"></script>
+<script src ="js/military.js"></script>
+<script src ="js/federal.js"></script>
+<script src ="js/state.js"></script>
+<script src ="js/private.js"></script>
+<script src ="js/magnifyingglass.js"></script>
+
+	
+
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+
+<style>
+	.ImgSize {
+		width: 240px;
+		margin: 0 auto;
+	}	
+	
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 100%;
+            font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+        }
+        .text {
+            font-style: italic;
+            color: #AAA;
+        }
+</style>
+
+
+</head>
+
+  <body>
+  <div id="sidebar" class="sidebar sidebar-left collapsed">
+  <!-- Nav tabs -->
+  <div class="sidebar-tabs">
+    <ul role="tablist">
+      <li class=""><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+      <li><a href="#profile" role="tab"><i class="fa fa-user"></i></a></li>
+      <li><a href="https://dikembe3000.github.io/cartography" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
+    </ul>
+
+    <ul role="tablist">
+      <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+    </ul>
+  </div>
+
+  <!-- Tab panes -->
+  <div class="sidebar-content">
+    <div class="sidebar-pane active" id="home">
+      <h1 class="sidebar-header">
+                    Title of Project
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+      <p>Normal Text</p>
+      <p class="text">Italic Text</p>
+    </div>
+    
+     <div class="sidebar-pane" id="profile">
+      <h1 class="sidebar-header">Profile
+      <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+      </h1>
+       <p>Normal Text</p>
+      <p class="text">Italic Text</p>
+    </div>
+    
+     <div class="sidebar-pane" id="messages">
+      <h1 class="sidebar-header">Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+    </div>
+    
+    <div class="sidebar-pane" id="settings">
+      <h1 class="sidebar-header">Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+    </div>
+    
+  </div>
+</div>
+
+
+<div id="mapid" class="sidebar-map"></div>
+
+
+
+	<script>
+	var mymap = L.map('mapid').setView([35, -95], 5);
+
+	L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+	subdomains: 'abcd',
+	maxZoom: 19
+})
+.addTo(mymap);
+		
+	
+    
+	
+
+		
+	function MuralInfo(feature, layer) {
+		layer.bindPopup("Prison: " + feature.properties.name + "</p> Population: " + feature.properties.population)
+		layer.setIcon (allicon)
+	};
+	
+	var allicon = new L.icon({iconUrl:'images/blue4.png'
+	})
+	
+	L.geoJson(military, {
+		onEachFeature: MuralInfo	
+	}).addTo(mymap);
+	
+	var allicon = new L.icon({iconUrl:'images/green4.png'
+	})
+	
+	
+	L.geoJson(federal, {
+		onEachFeature: MuralInfo	
+	}).addTo(mymap);
+	
+		
+	var allicon = new L.icon({iconUrl:'images/purple4.png'
+	})
+	
+	L.geoJson(private, {
+		onEachFeature: MuralInfo	
+	}).addTo(mymap);
+	
+		var allicon = new L.icon({iconUrl:'images/orange4.png'
+	})
+	
+	L.geoJson(state, {
+		onEachFeature: MuralInfo	
+	}).addTo(mymap);
+	
+	var tileUrl = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png';
+// but use two independant TileLayer objects
+var mapTiles = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png'),
+    magnifiedTiles = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png');
+
+var map = L.map('map', {
+    center: [30, -90],
+    zoom: 8,
+    layers: [ mapTiles ]
+});
+
+var magnifyingGlass = L.magnifyingGlass({
+    layers: [ magnifiedTiles ]
+}).addTo(map);
+			
+	var sidebar = L.control.sidebar('sidebar').addTo(map);
+		
+
+	</script>
+	
+	
+
+</body>
+</html>
